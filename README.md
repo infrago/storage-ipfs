@@ -1,2 +1,2 @@
 # store-ipfs
-infra.go ipfs store driver.
+infra.Go ipfs store driver.
