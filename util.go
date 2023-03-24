@@ -19,7 +19,6 @@ import (
 // 发送HTTP GET请求
 func HttpGet(url string, args ...Map) string {
 	req, err := http.NewRequest("GET", url, nil)
-	// fmt.Println("get", err)
 	if err == nil {
 
 		//处理头
@@ -36,16 +35,13 @@ func HttpGet(url string, args ...Map) string {
 
 		//发送请求
 		res, err := http.DefaultClient.Do(req)
-		// fmt.Println("get 2", err)
 		if err == nil {
 			defer res.Body.Close()
 			resBody, err := ioutil.ReadAll(res.Body)
-			// fmt.Println("get 3444", err, string(resBody))
 			if err == nil {
 				return string(resBody)
 			}
 		}
-
 	}
 
 	return ""
@@ -174,7 +170,6 @@ func HttpPostBytes(url string, bodyType string, body io.Reader, args ...Map) []b
 
 		//发送请求
 		res, err := http.DefaultClient.Do(req)
-		//fmt.Println("http", url, err)
 		if err == nil {
 			defer res.Body.Close()
 			resBody, err := ioutil.ReadAll(res.Body)
