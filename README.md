@@ -1,2 +1,2 @@
-# store-ipfs
-infra.Go ipfs store driver.
+# storage-ipfs
+infra.Go ipfs storage driver.
