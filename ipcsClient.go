@@ -1,4 +1,4 @@
-package store_ipfs
+package storage_ipfs
 
 import (
 	"errors"

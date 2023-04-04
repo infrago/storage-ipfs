@@ -1,4 +1,4 @@
-module github.com/infrago/store-ipfs
+module github.com/infrago/storage-ipfs
 
 go 1.17
 

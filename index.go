@@ -1,15 +1,15 @@
-package store_ipfs
+package storage_ipfs
 
 import (
 	"github.com/infrago/infra"
-	"github.com/infrago/store"
+	"github.com/infrago/storage"
 )
 
-func IPFSDriver() store.Driver {
+func IPFSDriver() storage.Driver {
 	return &ipfsStoreDriver{}
 }
 
-func IPCSDriver() store.Driver {
+func IPCSDriver() storage.Driver {
 	return &ipcsStoreDriver{}
 }
 

@@ -1,4 +1,4 @@
-package store_ipfs
+package storage_ipfs
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"time"
 
 	. "github.com/infrago/base"
-	"github.com/infrago/store"
+	"github.com/infrago/storage"
 
 	ipfs "github.com/ipfs/go-ipfs-api"
 )
@@ -20,7 +20,7 @@ type (
 		mutex   sync.RWMutex
 		actives int64
 
-		instance *store.Instance
+		instance *storage.Instance
 		setting  ipcsStoreSetting
 
 		client *ipcsClient
@@ -33,7 +33,7 @@ type (
 )
 
 // 连接
-func (driver *ipcsStoreDriver) Connect(instance *store.Instance) (store.Connect, error) {
+func (driver *ipcsStoreDriver) Connect(instance *storage.Instance) (storage.Connect, error) {
 	setting := ipcsStoreSetting{
 		Cluster: "http://127.0.0.1:9094",
 		Server:  "http://127.0.0.1:9095",
@@ -118,10 +118,10 @@ func (this *ipcsStoreConnect) Open() error {
 	this.shell = ipfs.NewShell(this.setting.Server)
 	return nil
 }
-func (this *ipcsStoreConnect) Health() store.Health {
+func (this *ipcsStoreConnect) Health() storage.Health {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
-	return store.Health{Workload: this.actives}
+	return storage.Health{Workload: this.actives}
 }
 
 // 关闭连接
@@ -129,7 +129,7 @@ func (this *ipcsStoreConnect) Close() error {
 	return nil
 }
 
-func (this *ipcsStoreConnect) Upload(target string, metadata Map) (store.File, store.Files, error) {
+func (this *ipcsStoreConnect) Upload(target string, metadata Map) (storage.File, storage.Files, error) {
 	stat, err := os.Stat(target)
 	if err != nil {
 		return nil, nil, err
@@ -157,7 +157,7 @@ func (this *ipcsStoreConnect) Upload(target string, metadata Map) (store.File, s
 		//目录
 		dir := this.instance.File(cid, stat.Name(), stat.Size())
 
-		files := store.Files{}
+		files := storage.Files{}
 		for _, link := range obj.Links {
 			files = append(files, this.instance.File(link.Hash, link.Name, int64(link.Size)))
 
@@ -200,7 +200,7 @@ func (this *ipcsStoreConnect) Upload(target string, metadata Map) (store.File, s
 	}
 }
 
-func (this *ipcsStoreConnect) Download(file store.File) (string, error) {
+func (this *ipcsStoreConnect) Download(file storage.File) (string, error) {
 	// target := path.Join(this.instance.Config.Cache, file.Hash())
 	// if file.Type() != "" {
 	// 	target += "." + file.Type()
@@ -225,15 +225,15 @@ func (this *ipcsStoreConnect) Download(file store.File) (string, error) {
 	return target, nil
 }
 
-func (this *ipcsStoreConnect) Remove(file store.File) error {
+func (this *ipcsStoreConnect) Remove(file storage.File) error {
 	_, err := this.client.Unpin(file.Hash())
 	return err
 }
 
-func (this *ipcsStoreConnect) Browse(file store.File, query Map, expires time.Duration) (string, error) {
+func (this *ipcsStoreConnect) Browse(file storage.File, query Map, expires time.Duration) (string, error) {
 	return fmt.Sprintf("%s/ipfs/%s", this.setting.Gateway, file.Hash()), nil
 }
 
-func (this *ipcsStoreConnect) Preview(file store.File, w, h, t int64, expiries ...time.Duration) (string, error) {
+func (this *ipcsStoreConnect) Preview(file storage.File, w, h, t int64, expiries ...time.Duration) (string, error) {
 	return fmt.Sprintf("%s/ipfs/%s", this.setting.Gateway, file.Hash()), nil
 }
