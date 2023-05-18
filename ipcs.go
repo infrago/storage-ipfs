@@ -234,6 +234,6 @@ func (this *ipcsStoreConnect) Browse(file storage.File, query Map, expires time.
 	return fmt.Sprintf("%s/ipfs/%s", this.setting.Gateway, file.Hash()), nil
 }
 
-func (this *ipcsStoreConnect) Preview(file storage.File, w, h, t int64, expiries ...time.Duration) (string, error) {
+func (this *ipcsStoreConnect) Preview(file storage.File, w, h, t int64, expires ...time.Duration) (string, error) {
 	return fmt.Sprintf("%s/ipfs/%s", this.setting.Gateway, file.Hash()), nil
 }
